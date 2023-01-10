@@ -1,0 +1,47 @@
+# versi docker compose yang digunakan
+version: "3.7"
+
+services:
+
+  # melakukan running dari docker image yang telah kita upload
+  item-app:
+
+    image: zikazama/item-app:v1
+
+    command: sh -c "yarn install && yarn run start"
+
+    ports:
+
+      - 80:8080
+
+    working_dir: /app
+
+    volumes:
+
+      - ./:/app
+    
+    restart: on-failure
+
+    environment:
+
+      DB_HOST: item-db
+
+      NODE_ENV: production
+
+  # database yang digunakan
+  item-db:
+
+    image: mongo:3.4
+
+    ports:
+      - 27017:27017
+
+    volumes:
+      - app-db:/data/db
+
+    restart: on-failure
+
+# sebagai penyimpanan di docker
+volumes:
+
+  app-db:
